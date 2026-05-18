@@ -4,19 +4,25 @@ using Garagev2.Vehicles;
 
 namespace Garagev2.Garages;
 
-public static class GarageHandler
+public class GarageHandler : IGarageHandler
 {
+  public Garage<Vehicle> Garage {get; private set;}
 
-  public static void ListAllVehicles(Vehicle[] vehicles)
+  public GarageHandler(Garage<Vehicle> garage)
   {
-    if (CheckForAvailableSpaces(vehicles) == vehicles.Length)
+    Garage = garage;
+  }
+
+  public void ListAllVehicles()
+  {
+    if (CheckForAvailableSpaces() == Garage.Vehicles.Length)
     {
       ErrorUtils.PrintError("There are currently no vehicles in the garage!");
 
     }
 
     Console.WriteLine("Current Vehicles in the garage: ");
-    foreach (var v in vehicles)
+    foreach (var v in Garage.Vehicles)
     {
       if (v == null)
       {
@@ -27,19 +33,13 @@ public static class GarageHandler
     }
   }
 
-  public static void AddNewVehicle(Vehicle newVehicle, Vehicle[] vehicles)
+  public void AddNewVehicle(Vehicle newVehicle)
   {
-    int availableSpace = CheckForAvailableSpaces(vehicles);
-    if (availableSpace == 0)
+    for (int i = 0; i <= Garage.Vehicles.Length; i++)
     {
-      Console.WriteLine("Oh no, the garage is full!");
-    }
-
-    for (int i = 0; i <= vehicles.Length; i++)
-    {
-      if (vehicles[i] == null)
+      if (Garage.Vehicles[i] == null)
       {
-        vehicles[i] = newVehicle;
+        Garage.Vehicles[i] = newVehicle;
         Console.WriteLine("Vehicle was added successfully!");
         return;
       }
@@ -50,11 +50,11 @@ public static class GarageHandler
     }
   }
 
-  public static Vehicle FindVehicleByRegistrationNumber(string regNumber, Vehicle[] vehicles)
+  public Vehicle FindVehicleByRegistrationNumber(string regNumber)
   {
     try
     {
-      var foundVehicle = vehicles.First(v => v != null && v.RegistryNumber == regNumber);
+      var foundVehicle = Garage.Vehicles.First(v => v != null && v.RegistryNumber == regNumber);
       Console.WriteLine("Found vehicle");
       return foundVehicle;
     }
@@ -66,45 +66,44 @@ public static class GarageHandler
     }
   }
 
-  public static void RemoveVehicleByRegistrationNumber(string regNumber, Vehicle[] vehicles)
+  public void RemoveVehicleByRegistrationNumber(string regNumber)
   {
-    var foundVehicle = vehicles.First(v => v != null && v.RegistryNumber == regNumber);
+    var foundVehicle = Garage.Vehicles.First(v => v != null && v.RegistryNumber == regNumber);
     if (foundVehicle == null)
     {
       ErrorUtils.PrintError("Could not find a vehicle with that registration number.");
       return;
     }
-    int index = vehicles.IndexOf(foundVehicle);
+    int index = Garage.Vehicles.IndexOf(foundVehicle);
 
-    vehicles[index] = null;
+    Garage.Vehicles[index] = null;
 
     Console.WriteLine($"Vehicle with registration number: {regNumber} has been removed");
   }
 
-  public static int CheckForAvailableSpaces(Vehicle[] vehicles)
+  public int CheckForAvailableSpaces()
   {
-    Vehicle[] availableSpots = Array.FindAll(vehicles, v => v == null);
-    return availableSpots.Length;
-
+    int count = Garage.Vehicles.Count( v => v == null);
+    return count; 
   }
 
-  public static bool CheckRegistrationNumberUniqueness(string regNumber, Vehicle[] vehicles)
+  public bool CheckRegistrationNumberUniqueness(string regNumber)
   {
-    foreach (var v in vehicles)
+    foreach (var v in Garage.Vehicles)
     {
-      var exists = vehicles.Any(v => v.RegistryNumber == regNumber);
+      var exists = Garage.Vehicles.Any(v => v.RegistryNumber == regNumber.ToLower());
       return exists;
     }
     return false;
   }
 
-  public static void CountVehicleTypes(Vehicle[] vehicles)
+  public void CountVehicleTypes()
   {
-    int amountOfCars = vehicles.Count(v => v != null && v.GetType() == typeof(Car));
-    int amountOfBuses = vehicles.Count(v => v != null && v.GetType() == typeof(Bus));
-    int amountOfAirPlanes = vehicles.Count(v => v != null && v.GetType() == typeof(Airplane));
-    int amountOfBoats = vehicles.Count(v => v != null && v.GetType() == typeof(Boat));
-    int amountOfMotorcycles = vehicles.Count(v => v != null && v.GetType() == typeof(Motorcycle));
+    int amountOfCars = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Car));
+    int amountOfBuses = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Bus));
+    int amountOfAirPlanes = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Airplane));
+    int amountOfBoats = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Boat));
+    int amountOfMotorcycles = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Motorcycle));
 
     Console.WriteLine("Currently these vehicles are parked in the garage: ");
     Console.WriteLine($"Cars: {amountOfCars}");

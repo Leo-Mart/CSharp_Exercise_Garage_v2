@@ -4,20 +4,22 @@ using Garagev2.Utilities;
 using Garagev2.Vehicles;
 
 
-
 Garage<Vehicle> garageEnum = new Garage<Vehicle>(5, "test-garaage");
+GarageHandler handler = new GarageHandler(garageEnum);
 
 Car Car1 = new Car("abc123", "black", 4, 4);
 Car Car2 = new Car("123abc", "black", 3, 3);
 Airplane Plane1 = new Airplane("113131", "white", 3, 100);
 Motorcycle Motorcycle1 = new Motorcycle("adfadad", "purple", 3, "hojda");
+Boat Boat1 = new Boat("adfadad", "purple", 3, true);
 
-GarageHandler.AddNewVehicle(Car1, garageEnum.Vehicles);
-GarageHandler.AddNewVehicle(Car2, garageEnum.Vehicles);
-GarageHandler.AddNewVehicle(Plane1, garageEnum.Vehicles);
-GarageHandler.AddNewVehicle(Motorcycle1, garageEnum.Vehicles);
+handler.AddNewVehicle(Car1);
+handler.AddNewVehicle(Car2);
+handler.AddNewVehicle(Plane1);
+handler.AddNewVehicle(Motorcycle1);
+handler.AddNewVehicle(Boat1);
 
-Menu.DisplayGarageMenu(garageEnum);
+Menu.DisplayGarageMenu(handler);
 
 // foreach (Car car in garageEnum)
 // {

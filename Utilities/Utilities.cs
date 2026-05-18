@@ -89,6 +89,7 @@ internal class FileUtils
         int garageSize = int.Parse(garageInfo[1].Substring(garageInfo[1].IndexOf(':') + 1));
 
         Garage<Vehicle> garage = new Garage<Vehicle>(garageSize, garageName);
+        GarageHandler handler = new GarageHandler(garage);
 
         for (int i = 1; i < garagesString.Length; i++)
         {
@@ -123,7 +124,7 @@ internal class FileUtils
               vehicle = new Airplane(regNumber, color, numberOfWheels, length);
               break;
           }
-          GarageHandler.AddNewVehicle(vehicle, garage.Vehicles);
+          handler.AddNewVehicle(vehicle);
         }
 
         Console.WriteLine($"Added {garage.Name}");

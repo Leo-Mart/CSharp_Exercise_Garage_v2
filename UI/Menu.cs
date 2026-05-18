@@ -30,7 +30,7 @@ public class Menu
     Console.ResetColor();
   }
 
-  public static Garage<Vehicle> HandleCreateGarage()
+  public static GarageHandler HandleCreateGarage()
   {
     Console.WriteLine("What is the name of the garage?");
     string name = InputUtils.ValidateStringInput();
@@ -40,6 +40,7 @@ public class Menu
     int garageSize = InputUtils.ValidateIntInput();
 
     Garage<Vehicle> garage = new Garage<Vehicle>(garageSize, name);
+    GarageHandler handler = new GarageHandler(garage);
 
     Console.WriteLine("Would you like to add vehicles as well? yes/no");
 
@@ -49,7 +50,7 @@ public class Menu
     {
       Console.WriteLine("Ok, no vehicles will be added to the garage at this point.");
       Console.WriteLine("You can add new vehicles in the next menu.");
-      return garage;
+      return handler;
     }
 
     Console.WriteLine("How many vehicles would you like to add?.");
@@ -72,15 +73,15 @@ public class Menu
     for (int i = 1; i <= numberOfVehicles; i++)
     {
       Console.WriteLine($"Entering info for vehicle {i} of {numberOfVehicles}");
-      HandleAddNewVehicle(garage);
+      HandleAddNewVehicle(handler);
     }
 
     Console.WriteLine("New Garage successfully made!\n");
-    return garage;
+    return handler;
 
   }
 
-  public static void DisplayGarageMenu(Garage<Vehicle> g)
+  public static void DisplayGarageMenu(GarageHandler handler)
   {
 
     bool showSubMenu = true;
@@ -89,7 +90,7 @@ public class Menu
     {
       Console.ForegroundColor = ConsoleColor.White;
       Console.WriteLine("***********************************");
-      Console.WriteLine($"*********** {g.Name} ************");
+      Console.WriteLine($"*********** {handler.Garage.Name} ************");
       Console.WriteLine("***********************************\n\n");
 
       Console.WriteLine("********************");
@@ -110,23 +111,23 @@ public class Menu
       switch (userSelection)
       {
         case "1":
-          HandleAddNewVehicle(g);
+          HandleAddNewVehicle(handler);
           break;
         case "2":
           Console.WriteLine("Enter the registration number of the vehicle you would like to remove: ");
           string regNumber = InputUtils.ValidateStringInput();
-          GarageHandler.RemoveVehicleByRegistrationNumber(regNumber, g.Vehicles);
+          handler.RemoveVehicleByRegistrationNumber(regNumber);
           break;
         case "3":
-          GarageHandler.ListAllVehicles(g.Vehicles);
+          handler.ListAllVehicles();
           break;
         case "4":
-          GarageHandler.CountVehicleTypes(g.Vehicles);
+          handler.CountVehicleTypes();
           break;
         case "5":
           Console.WriteLine("Enter the registration number of the vehicle you would like to find: ");
           regNumber = InputUtils.ValidateStringInput();
-          Vehicle foundVehicle = GarageHandler.FindVehicleByRegistrationNumber(regNumber, g.Vehicles);
+          Vehicle foundVehicle = handler.FindVehicleByRegistrationNumber(regNumber);
           if (foundVehicle == null)
           {
             break;
@@ -169,7 +170,7 @@ public class Menu
           break;
         case "7":
           Console.WriteLine("Saving garage info to file...");
-          FileUtils.SaveToFile(g);
+          FileUtils.SaveToFile(handler.Garage);
           break;
         case "9":
           showSubMenu = false;
@@ -184,8 +185,14 @@ public class Menu
 
   }
 
-  public static void HandleAddNewVehicle(Garage<Vehicle> g)
+  public static void HandleAddNewVehicle(GarageHandler handler)
   {
+    int availableSpace = handler.CheckForAvailableSpaces();
+    if (availableSpace == 0)
+    {
+      Console.WriteLine("Oh no, the garage is full!");
+      return;
+    }
     Console.WriteLine("What type of vehicle is it? ");
     string vehicleType = InputUtils.ValidateStringInput();
 
@@ -198,7 +205,7 @@ public class Menu
       registryNumber = InputUtils.ValidateStringInput();
     }
 
-    if (GarageHandler.CheckRegistrationNumberUniqueness(registryNumber, g.Vehicles))
+    if (handler.CheckRegistrationNumberUniqueness(registryNumber))
     {
       Console.WriteLine("A vehicle with that registration number is already parked in the garage!");
       registryNumber = InputUtils.ValidateStringInput();
@@ -216,25 +223,25 @@ public class Menu
         Console.WriteLine("Enter the number of doors for the car: ");
         int numberOfDoors = InputUtils.ValidateIntInput();
         Car newCar = new Car(registryNumber, color, numberOfWheels, numberOfDoors);
-        GarageHandler.AddNewVehicle(newCar, g.Vehicles);
+        handler.AddNewVehicle(newCar);
         break;
       case "motorcycle":
         Console.WriteLine("Enter the brand of the motorcycle:");
         string mcBrand = InputUtils.ValidateStringInput();
         Motorcycle newMotorcycle = new Motorcycle(registryNumber, color, numberOfWheels, mcBrand);
-        GarageHandler.AddNewVehicle(newMotorcycle, g.Vehicles);
+        handler.AddNewVehicle(newMotorcycle);
         break;
       case "airplane":
         Console.WriteLine("Enter the length of the airplane(use whole numbers): ");
         int planeLength = InputUtils.ValidateIntInput();
         Airplane newAirplane = new Airplane(registryNumber, color, numberOfWheels, planeLength);
-        GarageHandler.AddNewVehicle(newAirplane, g.Vehicles);
+        handler.AddNewVehicle(newAirplane);
         break;
       case "bus":
         Console.WriteLine("Enter the amount of seats on the buss: ");
         int amountOfSeats = InputUtils.ValidateIntInput();
         Bus newBus = new Bus(registryNumber, color, numberOfWheels, amountOfSeats);
-        GarageHandler.AddNewVehicle(newBus, g.Vehicles);
+        handler.AddNewVehicle(newBus);
         break;
       case "boat":
         Console.WriteLine("Does the boat have sails(yes/no)?");
@@ -246,7 +253,7 @@ public class Menu
         }
 
         Boat newBoat = new Boat(registryNumber, color, numberOfWheels, hasSails);
-        GarageHandler.AddNewVehicle(newBoat, g.Vehicles);
+        handler.AddNewVehicle(newBoat);
         break;
 
       default:
