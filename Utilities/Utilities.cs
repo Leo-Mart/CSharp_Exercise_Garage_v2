@@ -61,7 +61,7 @@ internal class FileUtils
 
     sb.Append($"name:{garage.Name};size:{garage.Vehicles.Length};");
     sb.Append(Environment.NewLine);
-    foreach (var vehicle in garage.Vehicles)
+    foreach (var vehicle in garage)
     {
       if (vehicle == null)
         continue;
@@ -76,7 +76,7 @@ internal class FileUtils
 
   }
 
-  internal static Garage<Vehicle> LoadGaragesFromFile(string fileName)
+  internal static GarageHandler LoadGaragesFromFile(string fileName)
   {
     string path = @$"./../../../{fileName}.txt";
     try
@@ -128,7 +128,7 @@ internal class FileUtils
         }
 
         Console.WriteLine($"Added {garage.Name}");
-        return garage;
+        return handler;
       } 
     }
     catch (FileNotFoundException e)

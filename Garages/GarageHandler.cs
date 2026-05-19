@@ -15,14 +15,14 @@ public class GarageHandler : IGarageHandler
 
   public void ListAllVehicles()
   {
-    if (CheckForAvailableSpaces() == Garage.Vehicles.Length)
+    if (CheckForAvailableSpaces() == Garage.Count())
     {
       ErrorUtils.PrintError("There are currently no vehicles in the garage!");
 
     }
 
     Console.WriteLine("Current Vehicles in the garage: ");
-    foreach (var v in Garage.Vehicles)
+    foreach (var v in Garage)
     {
       if (v == null)
       {
@@ -34,8 +34,8 @@ public class GarageHandler : IGarageHandler
   }
 
   public void AddNewVehicle(Vehicle newVehicle)
-  {
-    for (int i = 0; i <= Garage.Vehicles.Length; i++)
+  {       
+    for (int i = 0; i <= Garage.Count(); i++)
     {
       if (Garage.Vehicles[i] == null)
       {
@@ -54,7 +54,7 @@ public class GarageHandler : IGarageHandler
   {
     try
     {
-      var foundVehicle = Garage.Vehicles.First(v => v != null && v.RegistryNumber == regNumber);
+      var foundVehicle = Garage.First(v => v != null && v.RegistryNumber == regNumber);
       Console.WriteLine("Found vehicle");
       return foundVehicle;
     }
@@ -68,7 +68,7 @@ public class GarageHandler : IGarageHandler
 
   public void RemoveVehicleByRegistrationNumber(string regNumber)
   {
-    var foundVehicle = Garage.Vehicles.First(v => v != null && v.RegistryNumber == regNumber);
+    var foundVehicle = Garage.First(v => v != null && v.RegistryNumber == regNumber);
     if (foundVehicle == null)
     {
       ErrorUtils.PrintError("Could not find a vehicle with that registration number.");
@@ -91,7 +91,7 @@ public class GarageHandler : IGarageHandler
   {
     foreach (var v in Garage.Vehicles)
     {
-      var exists = Garage.Vehicles.Any(v => v.RegistryNumber == regNumber.ToLower());
+      var exists = Garage.Any(v => v.RegistryNumber == regNumber.ToLower());
       return exists;
     }
     return false;
@@ -99,11 +99,11 @@ public class GarageHandler : IGarageHandler
 
   public void CountVehicleTypes()
   {
-    int amountOfCars = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Car));
-    int amountOfBuses = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Bus));
-    int amountOfAirPlanes = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Airplane));
-    int amountOfBoats = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Boat));
-    int amountOfMotorcycles = Garage.Vehicles.Count(v => v != null && v.GetType() == typeof(Motorcycle));
+    int amountOfCars = Garage.Count(v => v != null && v.GetType() == typeof(Car));
+    int amountOfBuses = Garage.Count(v => v != null && v.GetType() == typeof(Bus));
+    int amountOfAirPlanes = Garage.Count(v => v != null && v.GetType() == typeof(Airplane));
+    int amountOfBoats = Garage.Count(v => v != null && v.GetType() == typeof(Boat));
+    int amountOfMotorcycles = Garage.Count(v => v != null && v.GetType() == typeof(Motorcycle));
 
     Console.WriteLine("Currently these vehicles are parked in the garage: ");
     Console.WriteLine($"Cars: {amountOfCars}");
@@ -113,35 +113,33 @@ public class GarageHandler : IGarageHandler
     Console.WriteLine($"Motorcycles: {amountOfMotorcycles}");
   }
 
-  //   public Vehicle[] SearchForVehiclesBySearchTerm(string type, string color, int wheels)
-  //   {
+    public Vehicle[] SearchForVehiclesBySearchTerm(string type, string color, int wheels)
+    {
+      if (!string.IsNullOrEmpty(type) && type == "vehicle" && !string.IsNullOrEmpty(color) && wheels != 0)
+      {
+        return Garage.Where(v => v != null && v.Color == color && v.NumberOfWheels == wheels && v.GetType().BaseType == typeof(Vehicle)).ToArray();  
+      } 
+      else if (!string.IsNullOrEmpty(type) && type == "vehicle" && !string.IsNullOrEmpty(color))
+      {
+        return Garage.Where(v => v != null && v.Color == color && v.GetType().BaseType == typeof(Vehicle)).ToArray();  
+      } 
+      else if (!string.IsNullOrEmpty(type) && type == "vehicle")
+      {
+        return Garage.Where(v => v != null && v.GetType().BaseType == typeof(Vehicle)).ToArray();  
+      } 
+      else if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(color) && wheels != 0)
+      {
+        return Garage.Where(v => v != null && v.Color == color && v.NumberOfWheels == wheels && v.GetType().Name.Equals(type, StringComparison.OrdinalIgnoreCase)).ToArray();      
+      } 
+      else if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(color))
+      {
+        return Garage.Where(v => v != null && v.Color == color && v.GetType().Name.Equals(type, StringComparison.OrdinalIgnoreCase)).ToArray();  
+      } 
+      else if (!string.IsNullOrEmpty(type))
+      {
+        return Garage.Where(v => v != null && v.GetType().Name.Equals(type, StringComparison.OrdinalIgnoreCase)).ToArray();       
+      }
 
-
-  //     if (!string.IsNullOrEmpty(type) && type == "vehicle" && !string.IsNullOrEmpty(color) && wheels != 0)
-  //     {
-  //       return Array.FindAll(Vehicles, v => v != null && v.Color == color && v.NumberOfWheels == wheels && v.GetType().BaseType == typeof(Vehicle));  
-  //     } 
-  //     else if (!string.IsNullOrEmpty(type) && type == "vehicle" && !string.IsNullOrEmpty(color))
-  //     {
-  //       return Array.FindAll(Vehicles, v => v != null && v.Color == color && v.GetType().BaseType == typeof(Vehicle));  
-  //     } 
-  //     else if (!string.IsNullOrEmpty(type) && type == "vehicle")
-  //     {
-  //       return Array.FindAll(Vehicles, v => v != null && v.GetType().BaseType == typeof(Vehicle));  
-  //     } 
-  //     else if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(color) && wheels != 0)
-  //     {
-  //       return Array.FindAll(Vehicles, v => v != null && v.Color == color && v.NumberOfWheels == wheels && v.GetType().Name.Equals(type, StringComparison.OrdinalIgnoreCase));      
-  //     } 
-  //     else if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(color))
-  //     {
-  //       return Array.FindAll(Vehicles, v => v != null && v.Color == color && v.GetType().Name.Equals(type, StringComparison.OrdinalIgnoreCase));  
-  //     } 
-  //     else if (!string.IsNullOrEmpty(type))
-  //     {
-  //       return Array.FindAll(Vehicles, v => v != null && v.GetType().Name.Equals(type, StringComparison.OrdinalIgnoreCase));       
-  //     }
-
-  //     return null;
-  //   }
+      return null;
+    }
 }

@@ -12,4 +12,5 @@ public interface IGarageHandler
   int CheckForAvailableSpaces();
   bool CheckRegistrationNumberUniqueness(string regNumber);
   void CountVehicleTypes();
+  Vehicle[] SearchForVehiclesBySearchTerm(string type, string color, int wheels);
 }

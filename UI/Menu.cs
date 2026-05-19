@@ -135,38 +135,37 @@ public class Menu
           Console.WriteLine(foundVehicle.DisplayDetails());
           break;
         case "6":
+          Console.WriteLine("Enter your filters");
+          Console.WriteLine("Vehicle type, enter 'none' to ignore type: ");
+          string vehicleType = InputUtils.ValidateStringInput();
+          if (vehicleType == "none")
+          {
+            vehicleType = "vehicle";
+          }
 
-          // Console.WriteLine("Enter your filters");
-          // Console.WriteLine("Vehicle type, enter 'none' to ignore type: ");
-          // string vehicleType = InputUtils.ValidateStringInput();
-          // if (vehicleType == "none")
-          // {
-          //   vehicleType = "vehicle";
-          // }
+          Console.WriteLine("Vehicle color, enter 'none' to ignore color: ");
+          string vehicleColor = InputUtils.ValidateStringInput();
+          if (vehicleColor == "none")
+          {
+            vehicleColor = "";
+          }
 
-          // Console.WriteLine("Vehicle color, enter 'none' to ignore color: ");
-          // string vehicleColor = InputUtils.ValidateStringInput();
-          // if (vehicleColor == "none")
-          // {
-          //   vehicleColor = "";
-          // }
+          Console.WriteLine("Number of wheels: ");
+          int wheels = InputUtils.ValidateIntInput();
 
-          // Console.WriteLine("Number of wheels: ");
-          // int wheels = InputUtils.ValidateIntInput();
-
-          // Vehicle[] foundVehicles = g.SearchForVehiclesBySearchTerm(vehicleType, vehicleColor, wheels);
-          // if (foundVehicles.Length == 0)
-          // {
-          //   Console.WriteLine("found no matches");
-          // }
-          // else
-          // {
-          //   Console.WriteLine("Found matches: ");
-          //   foreach (var v in foundVehicles)
-          //   {
-          //     Console.WriteLine(v.DisplayDetails());
-          //   }
-          // }
+          Vehicle[] foundVehicles = handler.SearchForVehiclesBySearchTerm(vehicleType, vehicleColor, wheels);
+          if (foundVehicles.Length == 0)
+          {
+            Console.WriteLine("found no matches");
+          }
+          else
+          {
+            Console.WriteLine("Found matches: ");
+            foreach (var v in foundVehicles)
+            {
+              Console.WriteLine(v.DisplayDetails());
+            }
+          }
           break;
         case "7":
           Console.WriteLine("Saving garage info to file...");

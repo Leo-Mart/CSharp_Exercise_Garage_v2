@@ -18,7 +18,7 @@ public class Car : Vehicle
 
   public Car(string registryNumber, string color, int numberOfWheels, int numberOfDoors) : base(registryNumber, color, numberOfWheels)
   {
-    this.NumberOfDoors = numberOfDoors;
+    NumberOfDoors = numberOfDoors;
   }
 
   public override string DisplayDetails()
