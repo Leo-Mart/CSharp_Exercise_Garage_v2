@@ -1,6 +1,4 @@
 using System;
-using System.Drawing;
-using Garagev2.Utilities;
 using System.Collections;
 using Garagev2.Vehicles;
 
@@ -36,7 +34,7 @@ public class Garage<T> : IEnumerable<T> where T : Vehicle
 
   public IEnumerator<T> GetEnumerator()
   {
-    foreach (var v in this.Vehicles)
+    foreach (var v in Vehicles)
     {
       if (v == null) 
         continue;
