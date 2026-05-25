@@ -937,11 +937,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\Development\\Lexicon CSharp\\Exercises\\Exercise 4\\Garagev2\\Garagev2\\Garagev2.Test\\Garagev2.Test.csproj",
+      "projectUniqueName": "D:\\Development\\Lexicon CSharp\\Exercises\\Exercise 4\\Garagev2\\Garagev2\\Garagev2.Test\\Garagev2.Test.csproj",
       "projectName": "Garagev2.Test",
-      "projectPath": "d:\\Development\\Lexicon CSharp\\Exercises\\Exercise 4\\Garagev2\\Garagev2\\Garagev2.Test\\Garagev2.Test.csproj",
+      "projectPath": "D:\\Development\\Lexicon CSharp\\Exercises\\Exercise 4\\Garagev2\\Garagev2\\Garagev2.Test\\Garagev2.Test.csproj",
       "packagesPath": "C:\\Users\\Loopy\\.nuget\\packages\\",
-      "outputPath": "d:\\Development\\Lexicon CSharp\\Exercises\\Exercise 4\\Garagev2\\Garagev2\\Garagev2.Test\\obj\\",
+      "outputPath": "D:\\Development\\Lexicon CSharp\\Exercises\\Exercise 4\\Garagev2\\Garagev2\\Garagev2.Test\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
